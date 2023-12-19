@@ -22,13 +22,13 @@ public extension AppRouter {
                     .frame(maxHeight: .infinity)
                     .navigationTitle("")
             }
-            .accentColor(Color.primary)
             .environmentObject(self.stack)
             .sheet(item: self.$stack.sheetRoute) { sheetRoute in
                 AppRouter.Stack {
                     sheetRoute.route.content
                 }
                 .presentationDetents(sheetRoute.presentation)
+                .presentationDragIndicator(.visible)
             }
 #if os(iOS)
             .fullScreenCover(
