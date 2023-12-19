@@ -37,8 +37,6 @@ public extension AppRouter {
                     Text(message)
                 }
             }
-
-
 #if os(iOS)
             .fullScreenCover(
                 item: self.$stack.fullScreenCoverRoute
