@@ -30,6 +30,15 @@ public extension AppRouter {
                 .presentationDetents(sheetRoute.presentation)
                 .presentationDragIndicator(.visible)
             }
+            .alert(self.stack.alert?.title ?? "", isPresented: self.$stack.isPresentingAlert) {
+                self.stack.alert?.buttons
+            } message: {
+                if let message = self.stack.alert?.subtitle {
+                    Text(message)
+                }
+            }
+
+
 #if os(iOS)
             .fullScreenCover(
                 item: self.$stack.fullScreenCoverRoute

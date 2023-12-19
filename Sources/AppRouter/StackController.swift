@@ -18,6 +18,29 @@ public extension AppRouter {
             self.presentation = presentation
         }
     }
+    
+    struct AlertRoute: Identifiable {
+        public var id: Route {
+            self.route
+        }
+        
+        let route: Route
+        let title: LocalizedStringKey?
+        let message: LocalizedStringKey?
+        let buttons: AnyView?
+        
+        public init(
+            route: Route,
+            title: LocalizedStringKey?,
+            message: LocalizedStringKey? = nil,
+            buttons: AnyView? = nil
+        ) {
+            self.route = route
+            self.title = title
+            self.message = message
+            self.buttons = buttons
+        }
+    }
 }
 
 public extension AppRouter {
@@ -34,6 +57,16 @@ public extension AppRouter {
         
         @Published
         var fullScreenCoverRoute: Route?
+        
+        @Published
+        var alert: Alert? {
+            didSet {
+                isPresentingAlert = alert != nil
+            }
+        }
+        
+        @Published
+        var isPresentingAlert: Bool = false
         
         public init(path: NavigationPath = NavigationPath()) {
             self.path = path
@@ -67,6 +100,15 @@ public extension AppRouter {
         
         public func presentFullScreenCover(route: Route) {
             self.fullScreenCoverRoute = route
+        }
+        
+        public func presentAlert<T: View>(title: LocalizedStringKey,
+                subtitle: LocalizedStringKey? = nil,
+                @ViewBuilder buttons: @escaping () -> T) where T: View {
+            self.alert = Alert(
+                title: title,
+                subtitle: subtitle,
+                buttons: buttons())
         }
     }
 }
