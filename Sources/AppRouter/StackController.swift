@@ -2,6 +2,7 @@ import Combine
 import SwiftUI
 
 public extension AppRouter {
+    
     struct SheetRoute: Identifiable {
         public var id: Route {
             self.route
@@ -44,6 +45,7 @@ public extension AppRouter {
 }
 
 public extension AppRouter {
+    
     class StackController: ObservableObject {
         @Published
         var path: [Route]
@@ -86,14 +88,17 @@ public extension AppRouter {
             self.path.isEmpty == false
         }
         
+        @MainActor
         public func push(route: Route) {
             self.path.append(route)
         }
         
+        @MainActor
         public func push(routes: [Route]) {
             self.path.append(contentsOf: routes)
         }
         
+        @MainActor
         public func present(route: Route, with presentation: Set<PresentationDetent>) {
             self.sheetRoute = .init(
                 route: route,
