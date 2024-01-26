@@ -70,13 +70,19 @@ public extension AppRouter {
         @Published
         var isPresentingAlert: Bool = false
         
-        public init(path: [Route] = []) {
+        var dismissStack: DismissAction
+        
+        public init(
+            path: [Route] = [],
+            dismiss: DismissAction
+        ) {
             self.path = path
+            self.dismissStack = dismiss
         }
         
         public func goBack(_ count: Int = 1) {
             guard canGoBack() else { return }
-
+            
             self.path.removeLast(count)
         }
         
@@ -110,14 +116,31 @@ public extension AppRouter {
             self.fullScreenCoverRoute = route
         }
         
-        public func presentAlert<T: View>(title: LocalizedStringKey,
-                subtitle: LocalizedStringKey? = nil,
-                @ViewBuilder buttons: @escaping () -> T) where T: View {
-            self.alert = Alert(
-                title: title,
-                subtitle: subtitle,
-                buttons: buttons())
+        public func dismiss() {
+            self.dismissStack()
+        }
+        
+        public func dismissSheet() {
+            self.sheetRoute = nil
+        }
+        
+        public func dismissFullScreenCover() {
+            self.fullScreenCoverRoute = nil
         }
     }
+}
+
+
+extension AppRouter.StackController {
+    
+    public func presentAlert<T: View>(title: LocalizedStringKey,
+                                      subtitle: LocalizedStringKey? = nil,
+                                      @ViewBuilder buttons: @escaping () -> T) where T: View {
+        self.alert = Alert(
+            title: title,
+            subtitle: subtitle,
+            buttons: buttons())
+    }
+    
 }
 
