@@ -47,6 +47,10 @@ public extension AppRouter {
 public extension AppRouter {
     
     class StackController: ObservableObject {
+        
+        @Published
+        var parentRouter: AppRouter.StackController?
+        
         @Published
         var path: [Route]
         
@@ -74,9 +78,11 @@ public extension AppRouter {
         
         public init(
             path: [Route] = [],
+            parentRouter: AppRouter.StackController?,
             dismiss: DismissAction
         ) {
             self.path = path
+            self.parentRouter = parentRouter
             self.dismissStack = dismiss
         }
         
@@ -121,11 +127,20 @@ public extension AppRouter {
         }
         
         public func dismissSheet() {
-            self.sheetRoute = nil
+            if let parentRouter = parentRouter {
+                parentRouter.dismissSheet()
+            } else {
+                self.sheetRoute = nil
+            }
+            
         }
         
         public func dismissFullScreenCover() {
-            self.fullScreenCoverRoute = nil
+            if let parentRouter = parentRouter {
+                parentRouter.dismissFullScreenCover()
+            } else {
+                self.fullScreenCoverRoute = nil
+            }
         }
     }
 }

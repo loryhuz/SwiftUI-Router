@@ -7,6 +7,9 @@ public extension AppRouter {
         @ViewBuilder
         var root: Root
         
+        @Environment(\.dismiss)
+        var dismiss
+        
         public var body: some View {
             NavigationStack(
                 path: self.$stack.path
@@ -24,9 +27,9 @@ public extension AppRouter {
             }
             .environmentObject(self.stack)
             .sheet(item: self.$stack.sheetRoute) { sheetRoute in
-                AppRouter.Stack {
+                AppRouter.Stack(root: {
                     sheetRoute.route.content
-                }
+                }, parentRouter: self.stack)
                 .presentationDetents(sheetRoute.presentation)
                 .presentationDragIndicator(.visible)
             }
@@ -41,9 +44,9 @@ public extension AppRouter {
             .fullScreenCover(
                 item: self.$stack.fullScreenCoverRoute
             ) { coverRoute in
-                AppRouter.Stack {
+                AppRouter.Stack(root: {
                     coverRoute.content
-                }
+                }, parentRouter: self.stack)
             }
 #endif
         }

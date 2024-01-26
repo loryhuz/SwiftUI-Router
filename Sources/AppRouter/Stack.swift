@@ -8,15 +8,19 @@ public extension AppRouter {
         @ViewBuilder
         public var root: Root
         
+        var parentRouter: AppRouter.StackController?
+        
         public init(
-            @ViewBuilder root: () -> Root
+            @ViewBuilder root: () -> Root,
+            parentRouter: AppRouter.StackController? = nil
         ) {
             self.root = root()
+            self.parentRouter = parentRouter
         }
         
         public var body: some View {
             AppRouter.DismissableStackWrapper(
-                dismiss: self.dismiss
+                dismiss: self.dismiss, parentRouter: parentRouter
             ) {
                 self.root
             }

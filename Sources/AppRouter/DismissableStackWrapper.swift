@@ -10,10 +10,11 @@ public extension AppRouter {
         
         public init(
             dismiss: DismissAction,
+            parentRouter: AppRouter.StackController?,
             @ViewBuilder root: () -> Root
         ) {
             self._stackController = StateObject(
-                wrappedValue: .init(dismiss: dismiss)
+                wrappedValue: .init(parentRouter: parentRouter, dismiss: dismiss)
             )
             
             self.root = root()
@@ -27,4 +28,6 @@ public extension AppRouter {
             }
         }
     }
+    
+    
 }
