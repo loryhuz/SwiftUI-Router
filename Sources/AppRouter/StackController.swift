@@ -10,13 +10,16 @@ public extension AppRouter {
         
         let route: Route
         let presentation: Set<PresentationDetent>
+        let background: AnyShapeStyle?
         
         public init(
             route: Route,
-            presentation: Set<PresentationDetent>
+            presentation: Set<PresentationDetent>,
+            background: AnyShapeStyle? = nil
         ) {
             self.route = route
             self.presentation = presentation
+            self.background = background
         }
     }
     
@@ -111,10 +114,13 @@ public extension AppRouter {
         }
         
         @MainActor
-        public func present(route: Route, with presentation: Set<PresentationDetent>) {
+        public func present(route: Route, with presentation: Set<PresentationDetent>, background: AnyShapeStyle? = nil) {
+            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+            
             self.sheetRoute = .init(
                 route: route,
-                presentation: presentation
+                presentation: presentation,
+                background: background
             )
         }
         
@@ -148,13 +154,17 @@ public extension AppRouter {
 
 extension AppRouter.StackController {
     
+    @MainActor
     public func presentAlert<T: View>(title: LocalizedStringKey,
                                       subtitle: LocalizedStringKey? = nil,
                                       @ViewBuilder buttons: @escaping () -> T) where T: View {
-        self.alert = Alert(
-            title: title,
-            subtitle: subtitle,
-            buttons: buttons())
+        DispatchQueue.main.async {
+            self.alert = Alert(
+                title: title,
+                subtitle: subtitle,
+                buttons: buttons())
+        }
+        
     }
     
 }

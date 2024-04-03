@@ -32,6 +32,7 @@ public extension AppRouter {
                 }, parentRouter: self.stack)
                 .presentationDetents(sheetRoute.presentation)
                 .presentationDragIndicator(.visible)
+                .sheetBackground(style: sheetRoute.background)
             }
             .alert(self.stack.alert?.title ?? "", isPresented: self.$stack.isPresentingAlert) {
                 self.stack.alert?.buttons
@@ -51,4 +52,16 @@ public extension AppRouter {
 #endif
         }
     }
+}
+
+private extension View {
+    @ViewBuilder
+    func sheetBackground(style: AnyShapeStyle?) -> some View {
+            if #available(iOS 16.4, *), let style = style {
+                // iOS 16.4 and above, apply specific modifier
+                self.presentationBackground(style)
+            } else {
+                self.background() // BUG: without this line the view disappear
+            }
+        }
 }
