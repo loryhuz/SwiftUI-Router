@@ -58,7 +58,7 @@ public extension AppRouter {
 private extension View {
     @ViewBuilder
     func sheetBackground<Route>(style: AnyShapeStyle?, parentRouter: AppRouter<Route>.StackController?) -> some View {
-        if #available(iOS 16.4, *), let style = style, parentRouter == nil {
+        if #available(iOS 16.4, *), #available(macOS 13.3, *), let style = style, parentRouter == nil {
                 // iOS 16.4 and above, apply specific modifier
                 self.presentationBackground(style)
             } else {

@@ -115,8 +115,10 @@ public extension AppRouter {
         
         @MainActor
         public func present(route: Route, with presentation: Set<PresentationDetent>, background: AnyShapeStyle? = nil) {
-            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
             
+#if os(iOS)
+            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+#endif
             self.sheetRoute = .init(
                 route: route,
                 presentation: presentation,
