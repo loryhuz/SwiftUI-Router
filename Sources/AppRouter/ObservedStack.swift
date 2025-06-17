@@ -46,7 +46,12 @@ public extension AppRouter {
                 item: self.$stack.fullScreenCoverRoute
             ) { coverRoute in
                 AppRouter.Stack(root: {
-                    coverRoute.content
+                    if #available(iOS 26, *) {
+                        coverRoute.content
+                            .background(Color(UIColor.systemBackground))
+                    } else {
+                        coverRoute.content
+                    }
                 }, parentRouter: self.stack)
                 
             }

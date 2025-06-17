@@ -62,7 +62,7 @@ public extension AppRouter {
         }
         
         @Published
-        var sheetRoute: SheetRoute?
+        public var sheetRoute: SheetRoute?
         
         @Published
         var fullScreenCoverRoute: Route?
